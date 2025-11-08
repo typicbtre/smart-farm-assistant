@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Smart Farm Assistant</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ☰ Hamburger Menu -->
+  <button class="hamburger" id="toggleSidebar">&#9776;</button>
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <h2 class="title">Smart Farm</h2>
+    <nav class="nav-buttons">
+      <button id="homeBtn">Home</button>
+      <button id="sidebarChatBtn">Chatbot</button>
+      <button id="toolsBtn">Tools</button>
+      <button id="tipsBtn">Tips</button>
+      <button id="profileBtn">Profile</button>
+    </nav>
+  </aside>
+
+  <!-- Main Content Area -->
+  <main class="main-content">
+    <h1>Main Web</h1>
+    <p>Welcome to your farming assistant. Choose an option from the menu.</p>
+
+    <!-- Home Dashboard -->
+    <section id="homeDashboard" class="dashboard">
+      <div class="kpi-grid">
+        <div class="card kpi"><span class="kpi-label">Soil Moisture</span><span class="kpi-value">42%</span></div>
+        <div class="card kpi"><span class="kpi-label">Next Watering</span><span class="kpi-value">Today 5:00 PM</span></div>
+        <div class="card kpi"><span class="kpi-label">Pest Risk</span><span class="kpi-value warning">Medium</span></div>
+        <div class="card kpi"><span class="kpi-label">Fertilizer</span><span class="kpi-value">In 6 days</span></div>
+      </div>
+
+      <div class="dashboard-grid">
+        <div class="card weather">
+          <h3>Weather</h3>
+          <div class="loc-controls">
+            <span class="city-label">City: <strong id="weatherCityLabel">Auto</strong></span>
+            <div class="loc-form">
+              <input type="text" id="weatherCityInput" placeholder="Enter city (e.g., London)" />
+              <button id="weatherSetCityBtn" class="qa-btn">Set</button>
+            </div>
+          </div>
+          <div class="weather-row">
+            <div class="temp">30°C</div>
+            <div class="cond">Partly Cloudy</div>
+          </div>
+          <div class="forecast">
+            <div class="day"><span>Sat</span><span>31°C</span></div>
+            <div class="day"><span>Sun</span><span>32°C</span></div>
+            <div class="day"><span>Mon</span><span>29°C</span></div>
+          </div>
+        </div>
+
+        <div class="card tasks">
+          <h3>Todo List</h3>
+          <div class="todo-controls">
+            <input type="text" id="todoInput" placeholder="Add a new task..." />
+            <button id="addTodoBtn" class="qa-btn">Add</button>
+          </div>
+          <ul id="todoList" class="todo-list"></ul>
+        </div>
+
+        <div class="card quick-actions">
+          <h3>Quick Actions</h3>
+          <div class="actions">
+            <button class="qa-btn" id="qaAskAssistant">Ask the Assistant</button>
+            <button class="qa-btn" id="qaScheduleWatering">Schedule Watering</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tips Section -->
+    <section id="tipsSection" class="tips">
+      <h2>Tips</h2>
+      <div class="tips-grid">
+        <div class="card tip-card">
+          <h3>Daily Tip</h3>
+          <p id="dailyTipText">Water early morning to reduce evaporation.</p>
+          <button id="nextTipBtn" class="qa-btn" type="button">Another tip</button>
+        </div>
+        <div class="card tip-card">
+          <h3>Seasonal Advice</h3>
+          <div class="form-row">
+            <label for="tipsRegion">Region</label>
+            <select id="tipsRegion">
+              <option value="tropics" selected>Tropics</option>
+              <option value="north">Northern Hemisphere</option>
+              <option value="south">Southern Hemisphere</option>
+            </select>
+          </div>
+          <p id="seasonalAdviceText">Most months are suitable in the tropics.</p>
+        </div>
+        <div class="card tip-card">
+          <h3>Pest of the Week</h3>
+          <p><strong id="pestName">Aphids</strong></p>
+          <p id="pestTipText">Check leaf undersides; spray mild soapy water and encourage ladybugs.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tools Section -->
+    <section id="toolsSection" class="tools">
+      <h2>Tools</h2>
+      <div class="tools-grid">
+        <div class="card tool-card">
+          <h3>Watering Schedule Calculator</h3>
+          <p>Estimate watering volume and timing by crop, soil, and weather.</p>
+          <form id="wateringForm" class="tool-form" onsubmit="return false;">
+            <div class="form-row">
+              <label for="waterCrop">Crop</label>
+              <select id="waterCrop">
+                <option>Tomato</option>
+                <option>Cucumber</option>
+                <option>Leafy Greens</option>
+                <option>Chili</option>
+              </select>
+            </div>
+            <div class="form-row">
+              <label for="soilType">Soil</label>
+              <select id="soilType">
+                <option value="sandy">Sandy</option>
+                <option value="loam" selected>Loam</option>
+                <option value="clay">Clay</option>
+              </select>
+            </div>
+            <div class="form-row">
+              <label for="bedArea">Bed area (m²)</label>
+              <input type="number" id="bedArea" min="0" step="0.1" value="4" />
+            </div>
+            <div class="form-row">
+              <label for="weatherCond">Weather</label>
+              <select id="weatherCond">
+                <option value="cool">Cool/Cloudy</option>
+                <option value="normal" selected>Normal</option>
+                <option value="hot">Hot/Sunny</option>
+                <option value="rainy">Rainy</option>
+              </select>
+            </div>
+            <button id="calcWatering" class="qa-btn" type="submit">Calculate</button>
+          </form>
+          <div id="wateringResult" class="tool-result"></div>
+        </div>
+        <div class="card tool-card">
+          <h3>Fertilizer Planner</h3>
+          <p>Get N-P-K guidance by crop and growth stage.</p>
+          <form id="fertForm" class="tool-form" onsubmit="return false;">
+            <div class="form-row">
+              <label for="fertCrop">Crop</label>
+              <select id="fertCrop">
+                <option>Tomato</option>
+                <option>Cucumber</option>
+                <option>Leafy Greens</option>
+                <option>Chili</option>
+              </select>
+            </div>
+            <div class="form-row">
+              <label for="growthStage">Stage</label>
+              <select id="growthStage">
+                <option value="seedling">Seedling</option>
+                <option value="vegetative" selected>Vegetative</option>
+                <option value="flowering">Flowering</option>
+                <option value="fruiting">Fruiting</option>
+              </select>
+            </div>
+            <div class="form-row">
+              <label for="areaFert">Area (m²)</label>
+              <input type="number" id="areaFert" min="0" step="0.1" value="4" />
+            </div>
+            <button id="calcFertilizer" class="qa-btn" type="submit">Plan</button>
+          </form>
+          <div id="fertResult" class="tool-result"></div>
+        </div>
+        <div class="card tool-card">
+          <h3>Planting Calendar</h3>
+          <p>See the best planting window and harvest estimate for your area.</p>
+          <form id="plantForm" class="tool-form" onsubmit="return false;">
+            <div class="form-row">
+              <label for="plantCrop">Crop</label>
+              <select id="plantCrop">
+                <option>Tomato</option>
+                <option>Cucumber</option>
+                <option>Leafy Greens</option>
+                <option>Chili</option>
+              </select>
+            </div>
+            <div class="form-row">
+              <label for="region">Region</label>
+              <select id="region">
+                <option value="tropics" selected>Tropics</option>
+                <option value="north">Northern Hemisphere</option>
+                <option value="south">Southern Hemisphere</option>
+              </select>
+            </div>
+            <div class="form-row">
+              <label for="plantDate">Planned plant date</label>
+              <input type="date" id="plantDate" />
+            </div>
+            <button id="calcPlanting" class="qa-btn" type="submit">Plan</button>
+          </form>
+          <div id="plantResult" class="tool-result"></div>
+        </div>
+        <div class="card tool-card">
+          <h3>Unit Converter</h3>
+          <p>Convert area, volume, and fertilizer rates quickly.</p>
+          <form id="convertForm" class="tool-form" onsubmit="return false;">
+            <div class="form-row">
+              <label for="convType">Type</label>
+              <select id="convType">
+                <option value="area">Area</option>
+                <option value="volume">Volume</option>
+                <option value="rate">Fertilizer Rate</option>
+              </select>
+            </div>
+            <div class="form-row">
+              <label for="convValue">Value</label>
+              <input type="number" id="convValue" step="0.0001" min="0" value="1" />
+            </div>
+            <div class="form-row">
+              <label for="fromUnit">From</label>
+              <select id="fromUnit"></select>
+            </div>
+            <div class="form-row">
+              <label for="toUnit">To</label>
+              <select id="toUnit"></select>
+            </div>
+            <button id="doConvert" class="qa-btn" type="submit">Convert</button>
+          </form>
+          <div id="convertResult" class="tool-result"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Profile Section -->
+    <section id="profileSection" class="profile" style="display: none;">
+      <h2>My Profile</h2>
+      <div class="profile-grid">
+        <div class="card">
+          <h3>Farm Information</h3>
+          <form id="profileForm" class="tool-form">
+            <div class="form-row">
+              <label for="farmName">Farm Name</label>
+              <input type="text" id="farmName" placeholder="Enter farm name">
+            </div>
+            <div class="form-row">
+              <label for="farmType">Farm Type</label>
+              <select id="farmType">
+                <option value="urban">Urban Garden</option>
+                <option value="small">Small Farm</option>
+                <option value="commercial">Commercial Farm</option>
+              </select>
+            </div>
+            <button type="submit" class="qa-btn">Save Changes</button>
+          </form>
+        </div>
+        
+        <div class="card">
+          <h3>Notifications</h3>
+          <form id="notifForm" class="tool-form">
+            <div class="form-row toggle-row">
+              <label>Weather Alerts</label>
+              <label class="switch">
+                <input type="checkbox" id="notifWeather" checked>
+                <span class="slider round"></span>
+              </label>
+            </div>
+            <div class="form-row toggle-row">
+              <label>Watering Reminders</label>
+              <label class="switch">
+                <input type="checkbox" id="notifWatering" checked>
+                <span class="slider round"></span>
+              </label>
+            </div>
+            <div class="form-row toggle-row">
+              <label>Pest/Disease Alerts</label>
+              <label class="switch">
+                <input type="checkbox" id="notifPests" checked>
+                <span class="slider round"></span>
+              </label>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- Chatbot Interface -->
+    <div id="chatInterface" class="chat-widget main-layout" style="display:block;">
+      <div class="chat-header">
+        <span>Smart Farm Assistant</span>
+        <button id="closeChat" class="close-chat" aria-label="Close chat">&times;</button>
+      </div>
+      <div id="chatBox" class="chat-box"></div>
+      <div class="chat-input">
+        <input id="userInput" type="text" placeholder="Ask about farming..." />
+        <button id="sendBtn">Send</button>
+      </div>
+    </div>
+  </main>
+
+  <!-- Scripts -->
+  <script src="knowledge.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
