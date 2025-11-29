@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Smart Farm Assistant</title>
   <link rel="stylesheet" href="style.css" />
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
 </head>
 <body>
 
@@ -30,33 +31,43 @@
 
     <!-- Home Dashboard -->
     <section id="homeDashboard" class="dashboard">
+      <!-- Weather Card -->
+      <div class="card weather-card">
+        <h3>Current Weather</h3>
+        <div class="weather-content">
+          <div class="weather-icon">
+            <img id="weatherIcon" src="" alt="Weather Icon" style="display: none;">
+          </div>
+          <div class="weather-details">
+          <div id="location">Loading location...</div>
+          <div id="temperature">--°C</div>
+         <div id="weatherDescription">--</div>
+        <div id="humidity">Humidity: --%</div>
+       <div id="wind">Wind: -- km/h</div>
+        </div>
+      </div>
       <div class="kpi-grid">
         <div class="card kpi"><span class="kpi-label">Soil Moisture</span><span class="kpi-value">42%</span></div>
         <div class="card kpi"><span class="kpi-label">Next Watering</span><span class="kpi-value">Today 5:00 PM</span></div>
-        <div class="card kpi"><span class="kpi-label">Pest Risk</span><span class="kpi-value warning">Medium</span></div>
+        <div class="card kpi"><span class="kpi-label">Pest risk</span><span class="kpi-value warning">58%</span></div>
         <div class="card kpi"><span class="kpi-label">Fertilizer</span><span class="kpi-value">In 6 days</span></div>
       </div>
 
       <div class="dashboard-grid">
-        <div class="card weather">
-          <h3>Weather</h3>
-          <div class="loc-controls">
-            <span class="city-label">City: <strong id="weatherCityLabel">Auto</strong></span>
-            <div class="loc-form">
-              <input type="text" id="weatherCityInput" placeholder="Enter city (e.g., London)" />
-              <button id="weatherSetCityBtn" class="qa-btn">Set</button>
+        <!-- Replace the second weather card with this location card -->
+          <div class="card location-card">
+            <h3>Location</h3>
+            <div class="location-content">
+              <div class="location-icon">
+                <i class="fas fa-map-marker-alt"></i>
+              </div>
+              <div class="location-details">
+              <div id="farmLocation">Loading location data...</div>
+              <div id="coordinates">Lat: --, Lng: --</div>
+              <div id="lastUpdated">Last updated: --</div>
+              </div>
             </div>
           </div>
-          <div class="weather-row">
-            <div class="temp">30°C</div>
-            <div class="cond">Partly Cloudy</div>
-          </div>
-          <div class="forecast">
-            <div class="day"><span>Sat</span><span>31°C</span></div>
-            <div class="day"><span>Sun</span><span>32°C</span></div>
-            <div class="day"><span>Mon</span><span>29°C</span></div>
-          </div>
-        </div>
 
         <div class="card tasks">
           <h3>Todo List</h3>
@@ -303,7 +314,7 @@
       </div>
     </div>
   </main>
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <!-- Scripts -->
   <script src="knowledge.js"></script>
   <script src="script.js"></script>

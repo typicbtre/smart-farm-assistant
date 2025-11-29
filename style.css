@@ -37,7 +37,7 @@ body {
   left: 0;
   width: 280px;
   height: 100%;
-  background-color: #5D866C;
+  background-color: #5e876d;
   color: white;
   padding: 20px 15px;
   z-index: 1000;
@@ -103,9 +103,26 @@ body {
   width: 100%;
   max-width: 100%;
   margin-left: 0;
-  transition: transform 0.3s ease, opacity 0.3s ease;
+  transition: transform 0.3s ease, opacity 0.3s ease, margin-left 0.3s ease;
   transform: translateX(0);
-  will-change: transform;
+  will-change: transform, margin-left;
+}
+
+/* Sidebar active state for larger screens */
+@media (min-width: 992px) {
+  .sidebar {
+    transform: translateX(0);
+    width: 220px;
+  }
+  
+  .main-content {
+    margin-left: 220px;
+    width: calc(100% - 220px);
+  }
+  
+  .hamburger {
+    display: none;
+  }
 }
 
 /* When sidebar is open on mobile */
@@ -148,6 +165,98 @@ body.sidebar-open {
 .sidebar.active ~ .main-content {
   margin-left: 220px;
 }
+
+/* Weather Card Styles */
+.weather-card {
+  background: linear-gradient(135deg, #6e8efb, #a777e3);
+  color: #5D866C;
+  border-radius: 12px;
+  padding: 20px;
+  margin: 20px 0;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 500px; /* Adjust as needed */
+}
+
+.weather-content {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.weather-icon img {
+  width: 60px;
+  height: 60px;
+}
+
+.weather-details {
+  flex-grow: 1;
+}
+
+#temperature {
+  font-size: 2rem;
+  font-weight: bold;
+  margin: 5px 0;
+}
+
+#location {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+#weatherDescription {
+  text-transform: capitalize;
+  margin: 5px 0;
+}
+
+#humidity, #wind {
+  font-size: 0.9rem;
+  opacity: 0.9;
+  margin: 3px 0;
+}
+
+/* Location Card Styles */
+.location-card {
+  background: linear-gradient(135deg, #ffffff, #4a6b5a);
+  color: #5d866c;
+  border-radius: 12px;
+  padding: 20px;
+  margin: 0 0 20px 0;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  width: 100%;
+}
+
+.location-content {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 10px 0;
+}
+
+.location-icon {
+  font-size: 2.5rem;
+  opacity: 0.9;
+}
+
+.location-details {
+  flex-grow: 1;
+}
+
+.location-details div {
+  margin: 5px 0;
+}
+
+#farmLocation {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+#coordinates, #lastUpdated {
+  font-size: 0.9rem;
+  opacity: 0.9;
+}
+
 
 /* Chatbot */
 .chat-launch {
@@ -266,7 +375,11 @@ body.sidebar-open {
   margin-top: 12px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 20px;
+  width: 100%;
+  max-width: 100%;
+  padding: 0 10px;
+  box-sizing: border-box;
 }
 
 .kpi-grid {
@@ -348,8 +461,42 @@ body.sidebar-open {
 
 /* Responsive dashboard grids */
 @media (min-width: 768px) {
-  .kpi-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-  .dashboard-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .kpi-grid { 
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
+  }
+  .dashboard-grid { 
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+  }
+}
+
+/* Full width dashboard on larger screens */
+@media (min-width: 992px) {
+  .dashboard {
+    max-width: none !important;
+    width: 100% !important;
+    padding: 0 !important;
+  }
+  
+  .card {
+    margin: 0;
+    height: 100%;
+  }
+  
+  .dashboard-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+  
+  .kpi-grid {
+    grid-template-columns: repeat(4, 1fr) !important;
+    margin-bottom: 20px;
+  }
+  
+  .weather-card {
+    max-width: none !important;
+    margin: 0 0 20px 0;
+  }
 }
 
 /* Todo List */
@@ -523,5 +670,191 @@ input:checked + .slider:before {
 
   .hamburger {
     display: none;
+  }
+}
+
+/* Main Content Area */
+.main-content {
+    margin-left: 220px;
+    padding: 20px;
+    width: calc(100% - 220px);
+    min-height: 100vh;
+    box-sizing: border-box;
+}
+
+/* Dashboard Container */
+.dashboard {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+/* KPI Grid */
+.kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+    width: 100%;
+}
+
+/* Dashboard Grid */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+    width: 100%;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 1200px) {
+    .kpi-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 992px) {
+    .main-content {
+        margin-left: 0;
+        width: 100%;
+        padding: 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .kpi-grid {
+        grid-template-columns: 1fr;
+    }
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Ensure main content matches the actual sidebar width on laptop */
+@media (min-width: 768px) {
+  .sidebar { width: 220px; transform: translateX(0); }
+  .main-content { margin-left: 220px; width: calc(100% - 220px); }
+}
+
+/* Force dashboard to use full available width on laptop/desktop */
+@media (min-width: 992px) {
+  #homeDashboard,
+  .dashboard {
+    width: 100%;
+    max-width: none;     /* override any earlier max-width */
+    margin-left: 0;      /* avoid unintended centering */
+    margin-right: 0;
+  }
+
+  /* Two columns for the lower grid on laptop+ */
+  .dashboard-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* Keep one column on tablets/phones */
+@media (max-width: 991px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Remove max-width constraint and use full width on laptops */
+@media (min-width: 992px) and (max-width: 1440px) {
+  .dashboard {
+    max-width: none !important;
+    width: 100% !important;
+  }
+  
+  /* Make KPI grid 4 columns on laptops */
+  .kpi-grid {
+    grid-template-columns: repeat(4, 1fr) !important;
+  }
+  
+  /* Ensure cards use full available space */
+  .dashboard-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 20px;
+  }
+}
+
+/* Override any conflicting rules */
+@media (min-width: 768px) {
+  .dashboard {
+    max-width: none !important;
+    width: 100% !important;
+  }
+}
+
+/* Force full width on all screens larger than tablet */
+@media (min-width: 992px) {
+  #homeDashboard,
+  .dashboard {
+    max-width: none !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  
+  .main-content {
+    width: calc(100% - 220px) !important;
+    max-width: none !important;
+  }
+  
+  .kpi-grid {
+    grid-template-columns: repeat(4, 1fr) !important;
+    width: 100% !important;
+  }
+  
+  .dashboard-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    width: 100% !important;
+  }
+}
+
+/* Also override for all larger screens */
+@media (min-width: 768px) {
+  #homeDashboard,
+  .dashboard {
+    max-width: none !important;
+    width: 100% !important;
+  }
+}
+
+/* Final override to remove max-width constraint */
+#homeDashboard,
+.dashboard {
+    max-width: none !important;
+    width: 100% !important;
+}
+
+/* Apply to all screen sizes */
+@media (min-width: 1px) {
+  #homeDashboard,
+  .dashboard {
+    max-width: none !important;
+    width: 100% !important;
+  }
+}
+
+/* Force 4-column KPI grid on laptops and desktops */
+@media (min-width: 992px) {
+  .kpi-grid {
+    grid-template-columns: repeat(4, 1fr) !important;
+  }
+}
+
+/* Also ensure 4 columns on tablets */
+@media (min-width: 768px) and (max-width: 991px) {
+  .kpi-grid {
+    grid-template-columns: repeat(4, 1fr) !important;
+  }
+}
+
+/* Make sure dashboard grid uses 2 columns on larger screens */
+@media (min-width: 992px) {
+  .dashboard-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
   }
 }

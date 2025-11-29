@@ -780,3 +780,208 @@ if (profileBtn) {
         }
     });
 }
+
+// Weather API Configuration
+const WEATHER_API_KEY = '948c3ba0e6406924f4d506ba217ef090'; // Replace with your API key
+const WEATHER_API_URL = 'https://api.openweathermap.org/data/2.5/weather';
+
+// Function to fetch weather by coordinates
+async function getWeatherByCoords(lat, lon) {
+    try {
+        const response = await fetch(
+            `${WEATHER_API_URL}?lat=${lat}&lon=${lon}&appid=${WEATHER_API_KEY}&units=metric`
+        );
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return await response.json();
+    } catch (error) {
+        console.error('Error fetching weather by coordinates:', error);
+        return null;
+    }
+}
+
+// Function to fetch weather by city name
+async function getWeatherByCity(city) {
+    try {
+        const response = await fetch(
+            `${WEATHER_API_URL}?q=${encodeURIComponent(city)}&appid=${WEATHER_API_KEY}&units=metric`
+        );
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return await response.json();
+    } catch (error) {
+        console.error(`Error fetching weather for ${city}:`, error);
+        return null;
+    }
+}
+
+// Function to update the UI with weather data
+function updateWeatherUI(weatherData) {
+    const elements = {
+        location: document.getElementById('location'),
+        temperature: document.getElementById('temperature'),
+        weatherDescription: document.getElementById('weatherDescription'),
+        humidity: document.getElementById('humidity'),
+        wind: document.getElementById('wind'),
+        weatherIcon: document.getElementById('weatherIcon')
+    };
+
+    // Check if weather data is valid
+    if (!weatherData || !weatherData.weather || !weatherData.weather[0]) {
+        elements.location.textContent = 'Weather data unavailable';
+        elements.temperature.textContent = '--°C';
+        elements.weatherDescription.textContent = '--';
+        elements.humidity.textContent = 'Humidity: --%';
+        elements.wind.textContent = 'Wind: -- km/h';
+        elements.weatherIcon.style.display = 'none';
+        return;
+    }
+
+    // Update UI with weather data
+    const { name, main, weather, wind } = weatherData;
+    const iconCode = weather[0].icon;
+
+    elements.location.textContent = name || 'Current Location';
+    elements.temperature.textContent = `${Math.round(main.temp)}°C`;
+    elements.weatherDescription.textContent = weather[0].description;
+    elements.humidity.textContent = `Humidity: ${main.humidity}%`;
+    elements.wind.textContent = `Wind: ${Math.round(wind.speed * 3.6)} km/h`;
+    elements.weatherIcon.src = `http://openweathermap.org/img/wn/${iconCode}@2x.png`;
+    elements.weatherIcon.style.display = 'block';
+    elements.weatherIcon.alt = weather[0].description;
+}
+
+// Function to get user's location and fetch weather
+async function getLocationWeather() {
+    return new Promise((resolve) => {
+        if (!navigator.geolocation) {
+            console.warn('Geolocation is not supported by this browser.');
+            resolve(getWeatherByCity('Kuala Lumpur'));
+            return;
+        }
+
+        navigator.geolocation.getCurrentPosition(
+            async (position) => {
+                const { latitude, longitude } = position.coords;
+                console.log(`Fetching weather for coordinates: ${latitude}, ${longitude}`);
+                const data = await getWeatherByCoords(latitude, longitude);
+                resolve(data || getWeatherByCity('Kuala Lumpur'));
+            },
+            async (error) => {
+                console.warn('Geolocation error:', error);
+                resolve(getWeatherByCity('Kuala Lumpur'));
+            },
+            {
+                enableHighAccuracy: true,
+                timeout: 10000,
+                maximumAge: 0
+            }
+        );
+    });
+}
+
+// Initialize weather when the page loads
+document.addEventListener('DOMContentLoaded', async () => {
+    console.log('Initializing weather...');
+    
+    try {
+        const weatherData = await getLocationWeather();
+        updateWeatherUI(weatherData);
+        
+        // Refresh weather every 30 minutes
+        setInterval(async () => {
+            console.log('Refreshing weather data...');
+            const newData = await getLocationWeather();
+            updateWeatherUI(newData);
+        }, 30 * 60 * 1000); // 30 minutes
+    } catch (error) {
+        console.error('Failed to initialize weather:', error);
+        updateWeatherUI(null);
+    }
+});
+
+// Location Card Functionality
+async function updateLocationCard(position) {
+    const { latitude, longitude } = position.coords;
+    const locationElement = document.getElementById('farmLocation');
+    const coordinatesElement = document.getElementById('coordinates');
+    const lastUpdatedElement = document.getElementById('lastUpdated');
+    
+    try {
+        // Get location name using reverse geocoding
+        const response = await fetch(
+            `https://geocode.xyz/${latitude},${longitude}?json=1&auth=101cd3b6caa446098bcd5fad83ebf1db`
+        );
+        const locationData = await response.json();
+        
+        // Update location card
+        locationElement.textContent = locationData.city ? 
+            `${locationData.city}, ${locationData.country}` : 
+            'Current Location';
+        
+        coordinatesElement.textContent = `Lat: ${latitude.toFixed(4)}, Lng: ${longitude.toFixed(4)}`;
+        lastUpdatedElement.textContent = `Last updated: ${new Date().toLocaleTimeString()}`;
+        
+    } catch (error) {
+        console.error('Error getting location data:', error);
+        locationElement.textContent = 'Current Location';
+        coordinatesElement.textContent = `Lat: ${latitude.toFixed(4)}, Lng: ${longitude.toFixed(4)}`;
+        lastUpdatedElement.textContent = `Last updated: ${new Date().toLocaleTimeString()}`;
+    }
+}
+
+// Update the getLocationWeather function to also update location
+async function getLocationWeather() {
+    return new Promise((resolve) => {
+        if (!navigator.geolocation) {
+            console.warn('Geolocation is not supported by this browser.');
+            updateLocationUI(null);
+            resolve(getWeatherByCity('Kuala Lumpur'));
+            return;
+        }
+
+        navigator.geolocation.getCurrentPosition(
+            async (position) => {
+                const { latitude, longitude } = position.coords;
+                console.log(`Fetching weather for coordinates: ${latitude}, ${longitude}`);
+                
+                // Update location card
+                updateLocationCard(position);
+                
+                // Get weather data
+                const data = await getWeatherByCoords(latitude, longitude);
+                resolve(data || getWeatherByCity('Kuala Lumpur'));
+            },
+            async (error) => {
+                console.warn('Geolocation error:', error);
+                updateLocationUI(null);
+                resolve(getWeatherByCity('Kuala Lumpur'));
+            },
+            {
+                enableHighAccuracy: true,
+                timeout: 10000,
+                maximumAge: 0
+            }
+        );
+    });
+}
+
+// Add this function to handle location UI updates
+function updateLocationUI(position) {
+    const locationElement = document.getElementById('farmLocation');
+    const coordinatesElement = document.getElementById('coordinates');
+    const lastUpdatedElement = document.getElementById('lastUpdated');
+    
+    if (!position) {
+        locationElement.textContent = 'Location unavailable';
+        coordinatesElement.textContent = 'Lat: --, Lng: --';
+        lastUpdatedElement.textContent = 'Last updated: --';
+        return;
+    }
+    
+    const { latitude, longitude } = position.coords;
+    coordinatesElement.textContent = `Lat: ${latitude.toFixed(4)}, Lng: ${longitude.toFixed(4)}`;
+    lastUpdatedElement.textContent = `Last updated: ${new Date().toLocaleTimeString()}`;
+}
