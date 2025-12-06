@@ -782,7 +782,7 @@ if (profileBtn) {
 }
 
 // Weather API Configuration
-const WEATHER_API_KEY = '948c3ba0e6406924f4d506ba217ef090'; // Replace with your API key
+const WEATHER_API_KEY = '1f5b5f3d4f6612a219bfae9008d43711'; // Replace with your API key
 const WEATHER_API_URL = 'https://api.openweathermap.org/data/2.5/weather';
 
 // Function to fetch weather by coordinates
